@@ -1,0 +1,30 @@
+# Test files
+test_*.py
+*_TEST_*.xlsx
+
+# Generated Excel files (user should generate their own)
+RSL_Rankings_*.xlsx
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude
+.claude/

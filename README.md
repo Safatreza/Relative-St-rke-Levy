@@ -1,93 +1,93 @@
-# RSL (Relative Stärke Levy) Stock Screening Strategy
+# RSL (Relative Stärke Levy) Aktien-Screening-Strategie
 
-A Python-based stock screening tool that ranks S&P 500 companies using the Relative Strength Levy (RSL) momentum strategy.
+Ein Python-basiertes Aktien-Screening-Tool zur Bewertung und Rangfolge von S&P 500 Unternehmen nach der Relative Stärke Levy (RSL) Momentum-Strategie.
 
-## Overview
+## Überblick
 
-The **Relative Strength Levy (RSL)** indicator was developed by Robert Levy in 1967. It measures a stock's momentum by comparing its current price to its historical average.
+Der **Relative Stärke Levy (RSL)** Indikator wurde 1967 von Robert Levy entwickelt. Er misst das Momentum einer Aktie, indem er den aktuellen Kurs mit dem historischen Durchschnitt vergleicht.
 
-### Formula
+### Formel
 
 ```
-RSL = Current Price / SMA(Price, N periods)
+RSL = Aktueller Kurs / SMA(Kurs, N Perioden)
 ```
 
-Where:
-- **Current Price** = Latest closing price
-- **SMA** = Simple Moving Average over N periods
-- **N** = Typically 130 trading days (~27 weeks)
+Wobei:
+- **Aktueller Kurs** = Letzter Schlusskurs
+- **SMA** = Einfacher gleitender Durchschnitt über N Perioden
+- **N** = Typischerweise 130 Handelstage (~27 Wochen)
 
 ### Interpretation
 
-| RSL Value | Meaning |
-|-----------|---------|
-| RSL > 1.0 | Stock trading above average (bullish momentum) |
-| RSL < 1.0 | Stock trading below average (bearish momentum) |
-| Higher RSL | Stronger relative strength |
+| RSL-Wert | Bedeutung |
+|----------|-----------|
+| RSL > 1,0 | Aktie handelt über Durchschnitt (bullisches Momentum) |
+| RSL < 1,0 | Aktie handelt unter Durchschnitt (bärisches Momentum) |
+| Höherer RSL | Stärkere relative Stärke |
 
-## Quick Start
+## Schnellstart
 
-### Option 1: Google Colab (Recommended)
+### Option 1: Google Colab (Empfohlen)
 
-1. Open [Google Colab](https://colab.research.google.com/)
-2. Upload `rsl_levy_strategy.ipynb`
-3. Run all cells
-4. Download the generated Excel report
+1. Öffnen Sie [Google Colab](https://colab.research.google.com/)
+2. Laden Sie `rsl_levy_strategy.ipynb` hoch
+3. Führen Sie alle Zellen aus
+4. Laden Sie den generierten Excel-Bericht herunter
 
-### Option 2: Local Jupyter
+### Option 2: Lokales Jupyter
 
 ```bash
-# Install dependencies
+# Abhängigkeiten installieren
 pip install yfinance pandas openpyxl beautifulsoup4 lxml tqdm xlsxwriter
 
-# Open notebook
+# Notebook öffnen
 jupyter notebook rsl_levy_strategy.ipynb
 ```
 
-## Features
+## Funktionen
 
-- Fetches all S&P 500 tickers from Wikipedia
-- Downloads price data from Yahoo Finance
-- Calculates RSL for each stock
-- Ranks stocks by momentum strength
-- Generates professional Excel report with:
-  - Summary statistics
-  - Full rankings with conditional formatting
-  - Top 25% buy candidates
-  - Sector analysis
+- Abruf aller S&P 500 Ticker von Wikipedia
+- Download der Kursdaten von Yahoo Finance
+- Berechnung des RSL für jede Aktie
+- Ranking der Aktien nach Momentum-Stärke
+- Erstellung eines professionellen Excel-Berichts mit:
+  - Zusammenfassungsstatistiken
+  - Vollständiger Rangliste mit bedingter Formatierung
+  - Obere 25% Kaufkandidaten
+  - Sektoranalyse
 
-## Configuration
+## Konfiguration
 
-Adjustable parameters in the notebook:
+Anpassbare Parameter im Notebook:
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| `RSL_PERIOD` | 130 | Trading days for SMA (~27 weeks) |
-| `LOOKBACK_DAYS` | 365 | Days of historical data |
-| `TOP_PERCENTILE` | 0.25 | Top performers threshold |
-| `API_DELAY` | 0.1 | Seconds between API calls |
+| Parameter | Standard | Beschreibung |
+|-----------|----------|--------------|
+| `RSL_PERIODE` | 130 | Handelstage für SMA (~27 Wochen) |
+| `RUECKBLICK_TAGE` | 365 | Tage historischer Daten |
+| `TOP_PROZENT` | 0.25 | Schwellenwert für Top-Performer |
+| `API_VERZOEGERUNG` | 0.1 | Sekunden zwischen API-Aufrufen |
 
-## Output
+## Ausgabe
 
-The notebook generates an Excel file with multiple sheets:
+Das Notebook generiert eine Excel-Datei mit mehreren Blättern:
 
-1. **Summary** - Key statistics and metadata
-2. **Full Rankings** - All stocks sorted by RSL
-3. **Top 25% Buy List** - Strongest momentum stocks
-4. **Sector Analysis** - Average RSL by sector
-5. **Failed Tickers** - Stocks that couldn't be processed
+1. **Zusammenfassung** - Wichtige Statistiken und Metadaten
+2. **Vollstaendige_Rangliste** - Alle Aktien nach RSL sortiert
+3. **Obere_25%_Kaufliste** - Aktien mit stärkstem Momentum
+4. **Sektoranalyse** - Durchschnittlicher RSL nach Sektor
+5. **Fehlgeschlagene_Ticker** - Aktien, die nicht verarbeitet werden konnten
 
-## Strategy Guidelines
+## Strategie-Richtlinien
 
-1. **Buy Candidates**: Focus on top 25% RSL stocks
-2. **Avoid**: Bottom 25% (weakest momentum)
-3. **Rebalance**: Monthly or quarterly
-4. **Diversification**: Spread across sectors
+1. **Kaufkandidaten**: Konzentrieren Sie sich auf die oberen 25% RSL-Aktien
+2. **Vermeiden**: Untere 25% (schwächstes Momentum)
+3. **Rebalancing**: Monatlich oder vierteljährlich
+4. **Diversifikation**: Über verschiedene Sektoren verteilen
 
-## Disclaimer
+## Haftungsausschluss
 
-This tool is for educational and research purposes only. Past momentum does not guarantee future performance. Always conduct your own research and consider consulting a financial advisor before making investment decisions.
+Dieses Tool dient ausschließlich Bildungs- und Forschungszwecken. Vergangenes Momentum garantiert keine zukünftige Performance. Führen Sie immer Ihre eigene Recherche durch und ziehen Sie die Beratung eines Finanzberaters in Betracht, bevor Sie Investitionsentscheidungen treffen.
 
-## License
+## Lizenz
 
-MIT License
+MIT-Lizenz

@@ -9,13 +9,12 @@ Der **Relative Stärke Levy (RSL)** Indikator wurde 1967 von Robert Levy entwick
 ### Formel
 
 ```
-RSL = Aktueller Kurs / SMA(Kurs, N Perioden)
+RSL = Aktueller Kurs / SMA(Kurs, 26 Tage)
 ```
 
 Wobei:
 - **Aktueller Kurs** = Letzter Schlusskurs
-- **SMA** = Einfacher gleitender Durchschnitt über N Perioden
-- **N** = Typischerweise 130 Handelstage (~27 Wochen)
+- **SMA** = Einfacher gleitender Durchschnitt über 26 Handelstage
 
 ### Interpretation
 
@@ -62,10 +61,10 @@ Anpassbare Parameter im Notebook:
 
 | Parameter | Standard | Beschreibung |
 |-----------|----------|--------------|
-| `RSL_PERIODE` | 130 | Handelstage für SMA (~27 Wochen) |
-| `RUECKBLICK_TAGE` | 365 | Tage historischer Daten |
+| `RSL_PERIODE` | 26 | Handelstage für SMA |
+| `RUECKBLICK_TAGE` | 400 | Tage historischer Daten |
 | `TOP_PROZENT` | 0.25 | Schwellenwert für Top-Performer |
-| `API_VERZOEGERUNG` | 0.1 | Sekunden zwischen API-Aufrufen |
+| `API_VERZOEGERUNG` | 0.15 | Sekunden zwischen API-Aufrufen |
 
 ## Ausgabe
 

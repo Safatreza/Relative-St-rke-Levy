@@ -1,9 +1,7 @@
-# Test files
-test_*.py
-*_TEST_*.xlsx
-
-# Generated Excel files (user should generate their own)
+# Generated Excel outputs (large, regenerated weekly — committed data lives in web/data/)
+RSL_SP500_Rangliste_*.xlsx
 RSL_Rankings_*.xlsx
+*_TEST_*.xlsx
 
 # Python
 __pycache__/

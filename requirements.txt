@@ -1,0 +1,8 @@
+yfinance
+pandas
+openpyxl
+xlsxwriter
+beautifulsoup4
+lxml
+tqdm
+requests

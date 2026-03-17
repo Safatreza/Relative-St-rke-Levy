@@ -1,9 +1,9 @@
-name: Weekly RSL S&P 500 Update
+name: RSL S&P 500 Update (Every 6 Hours)
 
 on:
   schedule:
-    # Every Monday at 06:00 UTC (after US market close Friday)
-    - cron: '0 6 * * 1'
+    # Every 6 hours: 00:00, 06:00, 12:00, 18:00 UTC
+    - cron: '0 0,6,12,18 * * *'
   workflow_dispatch:  # Allow manual trigger from GitHub UI
 
 jobs:
@@ -23,11 +23,10 @@ jobs:
         with:
           python-version: '3.11'
           cache: 'pip'
+          cache-dependency-path: 'requirements.txt'
 
       - name: Install dependencies
-        run: |
-          pip install --upgrade pip
-          pip install yfinance pandas openpyxl xlsxwriter beautifulsoup4 lxml tqdm requests
+        run: pip install -r requirements.txt
 
       - name: Run RSL screening and generate JSON
         run: python run_rsl_live.py
@@ -39,5 +38,8 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add web/data/rsl_rankings.json
-          git diff --cached --quiet || git commit -m "chore: weekly RSL data update $(date +'%Y-%m-%d')"
+          git diff --cached --quiet || git commit -m "chore: RSL data update $(date +'%Y-%m-%d %H:%M UTC')"
           git push
+
+      - name: Trigger Vercel deployment
+        run: curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_URL }}"

@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "updated": "2026-03-24T01:10:34",
-    "updated_display": "24.03.2026 01:10",
+    "updated": "2026-03-24T06:53:17",
+    "updated_display": "24.03.2026 06:53",
     "total_analyzed": 10,
     "failed": 0,
     "rsl_period_days": 26
@@ -83,7 +83,7 @@
       "vol_ratio": 1.02,
       "rel_vs_spx": 0.2,
       "beta": 0.688,
-      "pe_ratio": 15.473243,
+      "pe_ratio": 15.458294,
       "div_yield": 0.0
     },
     {
@@ -125,8 +125,8 @@
       "vol_ratio": 0.94,
       "rel_vs_spx": 2.05,
       "beta": 1.116,
-      "pe_ratio": 31.793934,
-      "div_yield": 42.0
+      "pe_ratio": 31.834177,
+      "div_yield": 41.0
     },
     {
       "rank": 6,
@@ -146,7 +146,7 @@
       "vol_ratio": 0.84,
       "rel_vs_spx": -0.62,
       "beta": 1.108,
-      "pe_ratio": 23.997494,
+      "pe_ratio": 23.982468,
       "div_yield": 95.0
     },
     {
@@ -185,7 +185,7 @@
       "pct_over_ma50": -8.05,
       "pct_over_ma200": -3.49,
       "pct_from_high": -22.26,
-      "vol_ratio": 1.04,
+      "vol_ratio": 1.05,
       "rel_vs_spx": -5.04,
       "beta": 1.926,
       "pe_ratio": 355.93457,
@@ -210,7 +210,7 @@
       "rel_vs_spx": -3.62,
       "beta": 0.38,
       "pe_ratio": 20.373396,
-      "div_yield": 321.0
+      "div_yield": 328.0
     },
     {
       "rank": 10,
@@ -230,7 +230,7 @@
       "vol_ratio": 0.91,
       "rel_vs_spx": -1.77,
       "beta": 1.279,
-      "pe_ratio": 25.693747,
+      "pe_ratio": 25.704681,
       "div_yield": 35.0
     }
   ],

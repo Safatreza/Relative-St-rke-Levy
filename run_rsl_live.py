@@ -21,7 +21,7 @@ RSL_PERIODE    = 26
 MA_50          = 50
 MA_200         = 200
 RUECKBLICK_TAGE = 400
-API_VERZOEGERUNG = 0.15
+API_VERZOEGERUNG = 0.25
 TOP_PROZENT    = 0.25
 ZEITSTEMPEL    = datetime.now().strftime('%Y%m%d_%H%M')
 AUSGABE_DATEI  = f"RSL_SP500_Rangliste_{ZEITSTEMPEL}.xlsx"
@@ -100,12 +100,23 @@ def hole_spx_kurse(start, end):
         return None
 
 # ── Per-stock data ────────────────────────────────────────────────────────────
-def hole_aktien_daten(ticker, start, end, spx_kurse=None):
-    try:
-        hist = yf.Ticker(ticker).history(start=start, end=end, auto_adjust=True)
-        if hist.empty or len(hist) < RSL_PERIODE:
-            return None
+def hole_aktien_daten(ticker, start, end, spx_kurse=None, max_versuche=3):
+    # Fetch price history with exponential backoff on transient errors
+    hist = None
+    for versuch in range(max_versuche):
+        try:
+            hist = yf.Ticker(ticker).history(start=start, end=end, auto_adjust=True)
+            break
+        except Exception:
+            if versuch < max_versuche - 1:
+                time.sleep(2 ** versuch)
+            else:
+                return None
 
+    if hist is None or hist.empty or len(hist) < RSL_PERIODE:
+        return None
+
+    try:
         closes = hist['Close']
         volume = hist['Volume']
 

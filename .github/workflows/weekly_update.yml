@@ -1,7 +1,9 @@
 name: RSL S&P 500 Update
 
 on:
-  workflow_dispatch:  # Manual trigger only
+  schedule:
+    - cron: '0 7 * * 1'  # Every Monday at 07:00 UTC (after US market open data available)
+  workflow_dispatch:  # Manual trigger also available
 
 jobs:
   update-rsl-data:
@@ -29,6 +31,20 @@ jobs:
         run: python run_rsl_live.py
         env:
           PYTHONUNBUFFERED: "1"
+
+      - name: Validate output (require ≥ 400 stocks)
+        run: |
+          python - <<'EOF'
+          import json, sys
+          with open('web/data/rsl_rankings.json') as f:
+              data = json.load(f)
+          total = data['metadata']['total_analyzed']
+          failed = data['metadata']['failed']
+          print(f"Analyzed: {total}, Failed: {failed}")
+          if total < 400:
+              print(f"ERROR: only {total} stocks analyzed — aborting commit to avoid publishing incomplete data.")
+              sys.exit(1)
+          EOF
 
       - name: Commit updated data
         run: |

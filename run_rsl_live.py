@@ -13,6 +13,7 @@ from tqdm import tqdm
 import time
 import warnings
 import os
+import io
 
 warnings.filterwarnings('ignore')
 
@@ -76,7 +77,7 @@ def hole_sp500_ticker():
             for t in soup.find_all('table', {'class': 'wikitable'}):
                 if t.find('th', string=lambda x: x and 'Symbol' in x):
                     table = t; break
-        df = pd.read_html(str(table))[0]
+        df = pd.read_html(io.StringIO(str(table)))[0]
         df.columns = df.columns.str.strip()
         result = pd.DataFrame({
             'Symbol':    df['Symbol'].str.strip().str.replace('.', '-', regex=False),

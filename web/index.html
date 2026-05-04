@@ -66,7 +66,7 @@
                box-shadow: 0 1px 4px rgba(0,0,0,0.05); margin-bottom: 24px; overflow: hidden; }
     .section-header {
       padding: 16px 20px; border-bottom: 1px solid var(--border);
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: gap;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
     }
     .section-header h2 { font-size: 15px; font-weight: 600; color: var(--navy); }
     .section-body { overflow-x: auto; }
@@ -285,7 +285,7 @@
 
 <footer>
   RSL Screening — Nur für Bildungs- und Forschungszwecke. Keine Anlageberatung. |
-  Daten: Yahoo Finance &amp; Wikipedia | Wöchentlich aktualisiert
+  Daten: Yahoo Finance &amp; Wikipedia | 2× täglich aktualisiert (Mo–Fr)
 </footer>
 
 <script>
@@ -486,7 +486,7 @@ function renderSectors() {
       <td>${s.in_top25} / ${s.count} <span style="color:var(--muted);font-size:11px">(${s.top25_pct.toFixed(1)}%)</span></td>
       <td>
         <div class="sector-bar">
-          <div class="bar-bg"><div class="bar-fill" style="width:${(s.top25_pct/maxPct*100).toFixed(0)}%"></div></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:${maxPct > 0 ? (s.top25_pct/maxPct*100).toFixed(0) : 0}%"></div></div>
           <span style="font-size:11px;color:var(--muted);width:36px;text-align:right">${s.top25_pct.toFixed(1)}%</span>
         </div>
       </td>

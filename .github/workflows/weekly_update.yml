@@ -35,8 +35,12 @@ jobs:
       - name: Validate output (require ≥ 400 stocks)
         run: |
           python - <<'EOF'
-          import json, sys
-          with open('web/data/rsl_rankings.json') as f:
+          import json, sys, os
+          path = 'web/data/rsl_rankings.json'
+          if not os.path.exists(path):
+              print("ERROR: JSON file not found — run_rsl_live.py may have crashed before writing output.")
+              sys.exit(1)
+          with open(path) as f:
               data = json.load(f)
           total = data['metadata']['total_analyzed']
           failed = data['metadata']['failed']

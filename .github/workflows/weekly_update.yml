@@ -2,7 +2,7 @@ name: RSL S&P 500 Update
 
 on:
   schedule:
-    - cron: '0 7 * * 1'  # Every Monday at 07:00 UTC (after US market open data available)
+    - cron: '0 10,22 * * 1-5'  # Weekdays at 10:00 UTC (pre-market) and 22:00 UTC (post-close)
   workflow_dispatch:  # Manual trigger also available
 
 jobs:

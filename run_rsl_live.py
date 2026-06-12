@@ -24,6 +24,8 @@ MA_200         = 200
 RUECKBLICK_TAGE = 400
 API_VERZOEGERUNG = 0.25
 TOP_PROZENT    = 0.25
+ATR_PERIODE    = 14
+ATR_WARN_SCHWELLE = 5.0  # Warnsignal, wenn tägliche Schwankung (ATR) > 5 % des Kurses
 ZEITSTEMPEL    = datetime.now().strftime('%Y%m%d_%H%M')
 AUSGABE_DATEI  = f"RSL_SP500_Rangliste_{ZEITSTEMPEL}.xlsx"
 
@@ -60,6 +62,22 @@ def berechne_ma(kurse, periode):
         return None
     try:
         return round(kurse.iloc[-periode:].mean(), 2)
+    except Exception:
+        return None
+
+def berechne_atr(hist, periode):
+    # Average True Range: TR = max(Hoch-Tief, |Hoch-Schluss_Vortag|, |Tief-Schluss_Vortag|)
+    if hist is None or len(hist) < periode + 1:
+        return None
+    try:
+        hoch, tief, schluss = hist['High'], hist['Low'], hist['Close']
+        vortag = schluss.shift(1)
+        tr = pd.concat([hoch - tief, (hoch - vortag).abs(), (tief - vortag).abs()],
+                       axis=1).max(axis=1)
+        atr = tr.iloc[-periode:].mean()
+        if pd.isna(atr):
+            return None
+        return atr
     except Exception:
         return None
 
@@ -104,9 +122,10 @@ def hole_spx_kurse(start, end):
 def hole_aktien_daten(ticker, start, end, spx_kurse=None, max_versuche=3):
     # Fetch price history with exponential backoff on transient errors
     hist = None
+    tk   = yf.Ticker(ticker)
     for versuch in range(max_versuche):
         try:
-            hist = yf.Ticker(ticker).history(start=start, end=end, auto_adjust=True)
+            hist = tk.history(start=start, end=end, auto_adjust=True)
             break
         except Exception:
             if versuch < max_versuche - 1:
@@ -122,7 +141,7 @@ def hole_aktien_daten(ticker, start, end, spx_kurse=None, max_versuche=3):
         volume = hist['Volume']
 
         try:
-            info = yf.Ticker(ticker).info
+            info = tk.info
         except Exception:
             info = {}
 
@@ -163,6 +182,9 @@ def hole_aktien_daten(ticker, start, end, spx_kurse=None, max_versuche=3):
 
         avg_vol = volume.iloc[-20:].mean() if len(volume) >= 20 else volume.mean()
 
+        atr     = berechne_atr(hist, ATR_PERIODE)
+        atr_pct = round(atr / kurs * 100, 2) if atr is not None and kurs else None
+
         div_raw = info.get('dividendYield', None)
 
         return {
@@ -188,6 +210,9 @@ def hole_aktien_daten(ticker, start, end, spx_kurse=None, max_versuche=3):
             'KGV':                 info.get('trailingPE', None),
             'Dividendenrendite':   round(div_raw * 100, 2) if div_raw else 0.0,
             'Rel_Staerke_SPX':     rel_spx,
+            'ATR':                 round(atr, 2) if atr is not None else None,
+            'ATR_Prozent':         atr_pct,
+            'ATR_Warnung':         bool(atr_pct is not None and atr_pct > ATR_WARN_SCHWELLE),
             'Datenpunkte':         len(closes),
         }
     except Exception:
@@ -230,6 +255,9 @@ def erstelle_excel(df, top, sektor_stats, fehler, datei):
     excel_df['MktCap_Text'] = excel_df['Marktkapitalisierung'].apply(formatiere_mktcap)
     top_ex   = top.copy()
     top_ex['MktCap_Text'] = top_ex['Marktkapitalisierung'].apply(formatiere_mktcap)
+    warn_text = lambda w: '⚠ JA' if w else ''
+    excel_df['ATR_Warnung_Text'] = excel_df['ATR_Warnung'].apply(warn_text)
+    top_ex['ATR_Warnung_Text']   = top_ex['ATR_Warnung'].apply(warn_text)
 
     with pd.ExcelWriter(datei, engine='xlsxwriter') as writer:
         wb = writer.book
@@ -237,24 +265,28 @@ def erstelle_excel(df, top, sektor_stats, fehler, datei):
                              'border': 1, 'align': 'center', 'valign': 'vcenter', 'text_wrap': True})
         ttl = wb.add_format({'bold': True, 'font_size': 14, 'font_color': '#1F4E79'})
         grn = wb.add_format({'bg_color': '#C6EFCE', 'border': 1})
+        wrn = wb.add_format({'bg_color': '#FFC7CE', 'font_color': '#9C0006', 'bold': True, 'border': 1})
 
         # Sheet 1 — Vollständige Rangliste
         cols1 = ['Rang','Ticker','Unternehmen','Sektor','Branche','Aktueller_Kurs','MktCap_Text',
                  'RSL','Perzentil','Aenderung_26T','Aenderung_1M','Aenderung_3M','Aenderung_6M',
                  'MA_50','MA_200','Proz_ueber_MA50','Proz_ueber_MA200',
                  'Proz_vom_Hoch','Proz_vom_Tief','Volumen_Ratio','Durchschn_Volumen',
-                 'Beta','KGV','Dividendenrendite']
+                 'Beta','KGV','Dividendenrendite','ATR_Prozent','ATR_Warnung_Text']
         hdrs1 = ['Rang','Ticker','Unternehmen','Sektor','Branche','Kurs ($)','Marktkapitalisierung',
                  'RSL 26T','Perzentil (%)','Änd. 26T (%)','Änd. 1M (%)','Änd. 3M (%)','Änd. 6M (%)',
                  'MA 50','MA 200','% über MA50','% über MA200',
                  '% vom Hoch','% vom Tief','Vol. Ratio','Ø Volumen',
-                 'Beta','KGV','Div. Rendite (%)']
+                 'Beta','KGV','Div. Rendite (%)','ATR % (Tag)','Warnsignal']
         b1 = excel_df[cols1].copy(); b1.columns = hdrs1
         b1.to_excel(writer, sheet_name='Vollstaendige_Rangliste', index=False)
         ws1 = writer.sheets['Vollstaendige_Rangliste']
         for i, h in enumerate(hdrs1): ws1.write(0, i, h, hdr)
         ws1.set_column('A:A', 6); ws1.set_column('B:B', 8); ws1.set_column('C:C', 26)
-        ws1.set_column('D:E', 20); ws1.set_column('F:X', 12)
+        ws1.set_column('D:E', 20); ws1.set_column('F:Z', 12)
+        warn_col = len(hdrs1) - 1
+        ws1.conditional_format(1, warn_col, len(b1), warn_col,
+                               {'type': 'text', 'criteria': 'containing', 'value': 'JA', 'format': wrn})
         top25 = int(len(df) * 0.25)
         ws1.conditional_format(1, 0, top25, len(hdrs1)-1,
                                {'type': 'formula', 'criteria': f'=$A2<={top25}', 'format': grn})
@@ -265,19 +297,22 @@ def erstelle_excel(df, top, sektor_stats, fehler, datei):
                  'RSL','Perzentil','Rel_Staerke_SPX',
                  'Aenderung_26T','Aenderung_1M','Aenderung_3M','Aenderung_6M',
                  'Proz_ueber_MA50','Proz_ueber_MA200','Tage_seit_Hoch','Proz_vom_Hoch',
-                 'Volumen_Ratio','KGV','Dividendenrendite']
+                 'Volumen_Ratio','KGV','Dividendenrendite','ATR_Prozent','ATR_Warnung_Text']
         hdrs2 = ['Rang','Ticker','Unternehmen','Sektor','Kurs ($)','Marktkapitalisierung',
                  'RSL 26T','Perzentil (%)','Rel. Stärke vs SPX',
                  'Änd. 26T (%)','Änd. 1M (%)','Änd. 3M (%)','Änd. 6M (%)',
                  '% über MA50','% über MA200','Tage seit Hoch','% vom Hoch',
-                 'Vol. Ratio','KGV','Div. Rendite (%)']
+                 'Vol. Ratio','KGV','Div. Rendite (%)','ATR % (Tag)','Warnsignal']
         b2 = top_ex[cols2].copy(); b2.columns = hdrs2
         b2.to_excel(writer, sheet_name='Top_25%_Stars', index=False)
         ws2 = writer.sheets['Top_25%_Stars']
         for i, h in enumerate(hdrs2): ws2.write(0, i, h, hdr)
         ws2.set_column('A:A', 6); ws2.set_column('B:B', 8); ws2.set_column('C:C', 26)
-        ws2.set_column('D:T', 14); ws2.freeze_panes(1, 0)
+        ws2.set_column('D:V', 14); ws2.freeze_panes(1, 0)
         ws2.autofilter(0, 0, len(b2), len(hdrs2)-1)
+        warn_col2 = len(hdrs2) - 1
+        ws2.conditional_format(1, warn_col2, len(b2), warn_col2,
+                               {'type': 'text', 'criteria': 'containing', 'value': 'JA', 'format': wrn})
 
         # Sheet 3 — Sektoranalyse
         beste = df.loc[df.groupby('Sektor')['RSL'].idxmax()].set_index('Sektor')['Ticker'].to_dict()
@@ -343,6 +378,8 @@ def erstelle_excel(df, top, sektor_stats, fehler, datei):
             ('Änd. 1M/3M/6M — Multi-Perioden-Renditen zur Trendbestätigung', False),
             ('Vol. Ratio    — 5-Tage-Volumen / 50-Tage-Volumen (>1,5 = Surge)', False),
             ('% über MA50/200 — Abstand vom gleitenden Durchschnitt', False),
+            ('ATR % (Tag)   — Ø tägliche Schwankung (ATR, 14 Tage) in % vom Kurs', False),
+            ('Warnsignal    — ATR über 5 % pro Tag = erhöhte Volatilität', False),
             ('', False),
             ('DATEN', True),
             ('Ticker:  Wikipedia — List of S&P 500 companies', False),
@@ -438,6 +475,8 @@ def erstelle_json(df, sektor_stats, fehler):
             "total_analyzed": len(df),
             "failed":         len(fehler),
             "rsl_period_days": RSL_PERIODE,
+            "atr_period_days": ATR_PERIODE,
+            "atr_warning_threshold_pct": ATR_WARN_SCHWELLE,
         },
         "stats": {
             "avg_rsl":      round(float(df['RSL'].mean()), 4),
@@ -448,6 +487,7 @@ def erstelle_json(df, sektor_stats, fehler):
             "min_ticker":   str(df.iloc[-1]['Ticker']),
             "bullish_count": int((df['RSL'] > 1).sum()),
             "bearish_count": int((df['RSL'] <= 1).sum()),
+            "atr_warning_count": int(df['ATR_Warnung'].sum()),
             "returns_avg": {
                 "26t": safe(round(float(df['Aenderung_26T'].dropna().mean()), 2)),
                 "1m":  safe(round(float(df['Aenderung_1M'].dropna().mean()),  2)),
@@ -476,6 +516,8 @@ def erstelle_json(df, sektor_stats, fehler):
                 "beta":          safe(r['Beta']),
                 "pe_ratio":      safe(r['KGV']),
                 "div_yield":     safe(r['Dividendenrendite']),
+                "atr_pct":       safe(r['ATR_Prozent']),
+                "atr_warning":   bool(r['ATR_Warnung']),
             }
             for _, r in df.iterrows()
         ],

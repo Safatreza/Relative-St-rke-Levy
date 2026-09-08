@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "updated": "2026-09-08T00:04:12",
-    "updated_display": "08.09.2026 00:04",
+    "updated": "2026-09-08T10:23:21",
+    "updated_display": "08.09.2026 10:23",
     "total_analyzed": 503,
     "failed": 0,
     "rsl_period_days": 26,
@@ -827,7 +827,7 @@
       "rel_vs_spx": 12.4,
       "beta": 0.226,
       "pe_ratio": 120.264,
-      "div_yield": 223.0,
+      "div_yield": 226.0,
       "atr_pct": 3.25,
       "atr_warning": false
     },
@@ -1126,7 +1126,7 @@
       "rel_vs_spx": 3.84,
       "beta": 0.491,
       "pe_ratio": 20.076998,
-      "div_yield": 337.0,
+      "div_yield": 341.0,
       "atr_pct": 1.76,
       "atr_warning": false
     },
@@ -1195,7 +1195,7 @@
       "rel_vs_spx": 11.54,
       "beta": 0.366,
       "pe_ratio": 9.023208,
-      "div_yield": 226.0,
+      "div_yield": 234.0,
       "atr_pct": 3.51,
       "atr_warning": false
     },
@@ -1356,7 +1356,7 @@
       "rel_vs_spx": 12.1,
       "beta": 0.711,
       "pe_ratio": 19.878868,
-      "div_yield": 148.0,
+      "div_yield": 154.0,
       "atr_pct": 3.79,
       "atr_warning": false
     },
@@ -1425,7 +1425,7 @@
       "rel_vs_spx": -2.39,
       "beta": 1.835,
       "pe_ratio": null,
-      "div_yield": 416.0,
+      "div_yield": 410.0,
       "atr_pct": 2.66,
       "atr_warning": false
     },
@@ -1494,7 +1494,7 @@
       "rel_vs_spx": 0.34,
       "beta": 0.872,
       "pe_ratio": 16.621082,
-      "div_yield": 284.0,
+      "div_yield": 288.0,
       "atr_pct": 2.3,
       "atr_warning": false
     },
@@ -1931,7 +1931,7 @@
       "rel_vs_spx": 4.86,
       "beta": 0.564,
       "pe_ratio": 23.764706,
-      "div_yield": 145.0,
+      "div_yield": 147.0,
       "atr_pct": 3.12,
       "atr_warning": false
     },
@@ -1976,7 +1976,7 @@
       "vol_ratio": 0.8,
       "rel_vs_spx": 2.34,
       "beta": 0.984,
-      "pe_ratio": 20.435814,
+      "pe_ratio": 20.457884,
       "div_yield": 264.0,
       "atr_pct": 2.36,
       "atr_warning": false
@@ -3425,7 +3425,7 @@
       "vol_ratio": 0.68,
       "rel_vs_spx": 20.4,
       "beta": 1.607,
-      "pe_ratio": 33.248394,
+      "pe_ratio": 33.21795,
       "div_yield": 0.0,
       "atr_pct": 3.09,
       "atr_warning": false
@@ -3610,7 +3610,7 @@
       "rel_vs_spx": 2.38,
       "beta": 1.016,
       "pe_ratio": 12.092511,
-      "div_yield": 145.0,
+      "div_yield": 146.0,
       "atr_pct": 2.24,
       "atr_warning": false
     },
@@ -4415,7 +4415,7 @@
       "rel_vs_spx": 0.2,
       "beta": 0.175,
       "pe_ratio": 20.52381,
-      "div_yield": 254.0,
+      "div_yield": 258.0,
       "atr_pct": 2.09,
       "atr_warning": false
     },
@@ -4760,7 +4760,7 @@
       "rel_vs_spx": 3.47,
       "beta": 0.59,
       "pe_ratio": 20.793863,
-      "div_yield": 297.0,
+      "div_yield": 299.0,
       "atr_pct": 2.67,
       "atr_warning": false
     },
@@ -4852,7 +4852,7 @@
       "rel_vs_spx": -3.68,
       "beta": 0.259,
       "pe_ratio": 17.646381,
-      "div_yield": 323.0,
+      "div_yield": 327.0,
       "atr_pct": 1.5,
       "atr_warning": false
     },
@@ -5105,7 +5105,7 @@
       "rel_vs_spx": 6.36,
       "beta": 1.517,
       "pe_ratio": 63.99543,
-      "div_yield": 382.0,
+      "div_yield": 385.0,
       "atr_pct": 2.94,
       "atr_warning": false
     },
@@ -5817,7 +5817,7 @@
       "vol_ratio": 0.63,
       "rel_vs_spx": -7.71,
       "beta": 0.662,
-      "pe_ratio": 28.53917,
+      "pe_ratio": 28.583076,
       "div_yield": 108.0,
       "atr_pct": 3.14,
       "atr_warning": false
@@ -6277,7 +6277,7 @@
       "vol_ratio": 0.74,
       "rel_vs_spx": -3.41,
       "beta": 0.417,
-      "pe_ratio": 20.739777,
+      "pe_ratio": 20.752636,
       "div_yield": 115.0,
       "atr_pct": 2.17,
       "atr_warning": false
@@ -6323,7 +6323,7 @@
       "vol_ratio": 0.66,
       "rel_vs_spx": -3.82,
       "beta": 0.466,
-      "pe_ratio": 16.464413,
+      "pe_ratio": 16.435167,
       "div_yield": 303.0,
       "atr_pct": 2.14,
       "atr_warning": false
@@ -7151,7 +7151,7 @@
       "vol_ratio": 1.0,
       "rel_vs_spx": -9.32,
       "beta": 0.807,
-      "pe_ratio": 25.425676,
+      "pe_ratio": 25.340067,
       "div_yield": 401.0,
       "atr_pct": 1.26,
       "atr_warning": false
@@ -9751,7 +9751,7 @@
       "rel_vs_spx": -5.09,
       "beta": 1.054,
       "pe_ratio": 30.970522,
-      "div_yield": 80.0,
+      "div_yield": 79.0,
       "atr_pct": 2.75,
       "atr_warning": false
     },
@@ -10211,7 +10211,7 @@
       "rel_vs_spx": -11.16,
       "beta": 1.186,
       "pe_ratio": 55.877155,
-      "div_yield": 21.0,
+      "div_yield": 22.0,
       "atr_pct": 3.64,
       "atr_warning": false
     },
@@ -10394,7 +10394,7 @@
       "vol_ratio": 1.13,
       "rel_vs_spx": -1.79,
       "beta": 1.25,
-      "pe_ratio": 18.732874,
+      "pe_ratio": 18.721106,
       "div_yield": 64.0,
       "atr_pct": 3.9,
       "atr_warning": false
